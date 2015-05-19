@@ -25,15 +25,20 @@ public class graphTest extends JFrame {
     BufferedImage ArrierePlan;
     Graphics buffer;
     int xpos=0;
-    int toucheHaut=69;
-    int toucheBas=70;
-    int toucheGauche=81;
-    int toucheDroite=68;
+    //int toucheHaut=69;
+    //int toucheBas=70;
+    //int toucheGauche=81;
+    //int toucheDroite=68;
     Kart kart1;
-    boolean ToucheHaut,ToucheBas,ToucheDroite,ToucheGauche;
+    boolean ToucheHaut,ToucheBas,ToucheDroite,ToucheGauche,FlecheHaut,FlecheBas,Space;
     char tourne;
     char freine;
     LinkedList <Item> Items;//liste de tous les objets actifs
+    double X; //le x du kart que l'on  récupérera une fois par boucle pour éviter d'avoir à appeler tous les temps les accesseurs
+    double Y;
+    double DX;
+    double DY;
+    
     
 
     
@@ -59,7 +64,7 @@ public class graphTest extends JFrame {
         this.setSize(900,576);
         this.setVisible(true);
         Rectangle Ecran=new Rectangle(getInsets().left,getInsets().top,getSize().width-getInsets().right-getInsets().left,getSize().height-getInsets().bottom-getInsets().top);
-        kart1=new Kart(300,300,0,1,15,10,0.7,150,1,1);
+        kart1=new Kart(300,300,0,1,15,10,0.1,150,1,1);
         this.addKeyListener(new graphTest_this_keyAdapter(this));
         ArrierePlan=new BufferedImage(2000,2000,BufferedImage.TYPE_INT_RGB);
         buffer=ArrierePlan.getGraphics();
@@ -71,6 +76,11 @@ public class graphTest extends JFrame {
         
     }
     public void boucle_principale_jeu(){
+         X=kart1.getX();
+         Y=kart1.getY();
+         DX=kart1.getdx();
+         DY=kart1.getdy();
+
         if (ToucheBas){
             freine='y';
             kart1.freine();
@@ -99,21 +109,51 @@ public class graphTest extends JFrame {
         }
         kart1.derapage(tourne,freine);
         freine='n';
+        if (kart1.Bonus()){//Si le kart a un bonus dispo
+            if (FlecheHaut || FlecheBas || Space ){//FlecheHaut pour tirer missile haut, FlecheBas pour le tirer en bas, Space pour poser bombe ou banane
+                if (kart1.getNomBonus()=="MISSILE"){
+                    if (FlecheHaut){
+                        Missile m=new Missile(X+DX*2.5,Y+DY*2.5,DX,DY);//le missile est créé devant si on tire devant
+                        Items.add(m);
+                    }
+                    else if (FlecheBas){
+                        Missile m=new Missile(X-DX*2.5,Y-DY*2.5,-DX,-DY);//ou derrière si on tire derrière
+                        Items.add(m);
+                    }
+                }
+                else if (kart1.getNomBonus()=="BANANE"){
+                    if (Space){
+                        Banane b=new Banane(X-DX*2.5,Y-DY*2.5,DX,DY);
+                        Items.add(b);
+                    }
+                }
+            }
+            
+        }
+        for (int k=0; k<Items.size(); k++) {
+            Item O = Items.get(k);
+            O.move();
+        }
+        
+        
         repaint();
         
     }
     public void paint(Graphics g){
-        //int xc=getSize().width/2;
-       // int yc=getSize().height/2;
-        //buffer.setColor(Color.black);
-        //buffer.fillRect(0,0,2000,2000);
         buffer.drawImage(background,0,0,this);
         //Graphics2D g2d=(Graphics2D)buffer;//partie où on fait pivoter l'image
         //AffineTransform transformer=g2d.getTransform();
-        kart1.drawGraphTest(buffer);
+        //kart1.drawGraphTest(buffer);
         //System.out.println(thetaIm);
         //g2d.rotate(-thetaIm,kart1.getX(),kart1.getY());
+        //g.drawImage(ArrierePlan,0,0,this);
+        for (int k=0; k<Items.size(); k++) {
+            Item O = Items.get(k);
+            O.drawGraphTest(buffer);
+        }
+        // dessine une seule fois le buffer dans le Panel
         g.drawImage(ArrierePlan,0,0,this);
+  
     }
     
      void this_keyPressed(KeyEvent e){
@@ -143,6 +183,19 @@ public class graphTest extends JFrame {
             ToucheGauche=false;
             ToucheDroite=false;
         }
+        if (code==38){
+            FlecheHaut=true;//flèche de la droite du clavier, différent de ToucheHaut (z)
+        }
+        else if (code==40){
+            FlecheBas=true;
+        }
+        if (code==32){
+            Space=true;
+        }
+        if (FlecheHaut && FlecheBas){
+            FlecheHaut=false;
+            FlecheBas=false;
+        }
     }
 
     void this_keyReleased(KeyEvent e){
@@ -159,6 +212,15 @@ public class graphTest extends JFrame {
         } 
         else if (code==90){
                 ToucheHaut=false;
+        }
+        if (code==38){
+            FlecheHaut=false;//flèche de la droite du clavier, différent de ToucheHaut (z)
+        }
+         else if (code==40){
+            FlecheBas=false;
+        }
+        if (code==32){
+            Space=false;
         }
     } 
     

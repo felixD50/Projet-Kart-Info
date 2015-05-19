@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.awt.Image;
 
 import java.awt.Rectangle;
@@ -44,11 +45,14 @@ public abstract class Item {
     
     public abstract void doCollision(Item item);
     
-    public abstract void avance();
-    public abstract void avance(int i);
+    public abstract void move();//différent du avance(int i) de kart
+    
+    public abstract void drawGraphTest(Graphics g);
+        
     
     public void setTemps(){// augmente le tempsVie de l'objet
            this.tempsVie++; 
     }
+    
     
 }

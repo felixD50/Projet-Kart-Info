@@ -25,6 +25,8 @@ public class Kart extends Item {
     private double coeffFrein;//coeff de freinage qui fait augmenter la fCent lorsqu'on freine;
     private double dxDir,dyDir;
     private int compt;//compteur dérapage
+    private static boolean aBonus=true;//CES DEUX VARIABLES SONT EN STATIQUE JUSTE POUR DES TEST
+    private static String nomBonus="MISSILE";//PAREIL
     
     
     
@@ -101,7 +103,7 @@ public class Kart extends Item {
                 frontSpeed=maxSpeed;
             }
             
-        }System.out.println(frontSpeed);
+        }System.out.println("frontSpeed= "+frontSpeed);
         if (i==0 && derapeDroite==false && derapeGauche==false){
             x=x+dx*(frontSpeed*0.025);
             y=y+dy*(frontSpeed*0.025);
@@ -312,6 +314,12 @@ public class Kart extends Item {
     public double getY(){
         return y;
     }
+    public double getdx(){
+        return dx;
+    }
+    public double getdy(){
+        return dy;
+    }
     
     public boolean collision(Item item){// les coordonnées des coins du kart doivent avoir été mises à jour 
         this.calculTheta();                                                                       
@@ -391,7 +399,15 @@ public class Kart extends Item {
         return maxSpeed;
     }
     
-    public void avance(){//méthode qui ne sert à rien ici car pour le kart on utilisera toujours celle avec int i en paramètre
+    
+    public boolean Bonus(){
+        return aBonus;
+    }
+    public String getNomBonus(){
+        return nomBonus;
+    }
+    
+    public void move(){
         
     }
 }

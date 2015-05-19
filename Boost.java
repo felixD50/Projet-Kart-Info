@@ -1,4 +1,4 @@
-public class Boost{//Work in progress hello bonjour
+public class Boost{//Work in progress 
     
     public void active(Kart kart){
         kart.setMaxSpeed(kart.getMaxSpeed()+10);

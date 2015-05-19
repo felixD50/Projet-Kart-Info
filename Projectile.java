@@ -32,7 +32,6 @@ public  abstract class Projectile extends Item{
         }return colliMur;
     }
         
-    public abstract void doCollision(Item item);
     
     
     
