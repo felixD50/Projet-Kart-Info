@@ -59,7 +59,7 @@ public class Kart extends Item {
     }
     public void tourne(char a){
         double theta=0;
-        if (a=='g'&& derapeGauche==false && derapeDroite==false && frontSpeed>0.5){
+        if (a=='g'&& derapeGauche==false && derapeDroite==false && frontSpeed>0.2){
             System.out.println("tourne à gauche");
             double dxc=-dy;
             double dyc=dx;
@@ -74,7 +74,7 @@ public class Kart extends Item {
             dx=-(y-yc)/norme;
         }
     
-        if (a=='d' && derapeDroite==false && derapeGauche==false && frontSpeed>0.5){
+        if (a=='d' && derapeDroite==false && derapeGauche==false && frontSpeed>0.2){
             System.out.println("tourne à droite");
             double dxc=dy;
             double dyc=-dx;
@@ -222,7 +222,6 @@ public class Kart extends Item {
                 
                 if (Math.abs(Math.atan2(dy,dx)-Math.atan2(dyDir,dxDir))>0.5){//il derape plus longtemps si la direction de la voiture est différente de celle vers laquelle elle dérape
                     coeff=0.1;
-                    System.out.println("WOLOLOLO");
                 }
             }
             
@@ -283,7 +282,6 @@ public class Kart extends Item {
             
                 if (Math.abs(Math.atan2(dy,dx)-Math.atan2(dyDir,dxDir))>0.5){
                     coeff=0.1;
-                    System.out.println("WOLOLOLO");
                 }
             }
         }
@@ -314,6 +312,15 @@ public class Kart extends Item {
     public double getY(){
         return y;
     }
+    
+    public void setX(double x){
+        this.x=x;
+    }
+    
+    public void setY(double y){
+        this.y=y;
+    }
+    
     public double getdx(){
         return dx;
     }

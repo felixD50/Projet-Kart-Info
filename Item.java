@@ -44,6 +44,7 @@ public abstract class Item {
     public abstract boolean collision(Item item);
     
     public abstract void doCollision(Item item);
+
     
     public abstract void move();//différent du avance(int i) de kart
     
