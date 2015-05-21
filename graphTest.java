@@ -13,6 +13,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
@@ -34,7 +36,7 @@ public class graphTest extends JFrame {
     boolean ToucheHaut,ToucheBas,ToucheDroite,ToucheGauche,FlecheHaut,FlecheBas,FlecheDroite,FlecheGauche,Touche5,Touche2,Shift,Space;
     char tourne;
     char freine;
-    LinkedList <Item> Items;//liste de tous les objets actifs
+    ArrayList <Item> Items;//liste de tous les objets actifs
     double X; //le x du kart que l'on  récupérera une fois par boucle pour éviter d'avoir à appeler tous les temps les accesseurs
     double Y;
     double DX;
@@ -68,7 +70,7 @@ public class graphTest extends JFrame {
         this.addKeyListener(new graphTest_this_keyAdapter(this));
         ArrierePlan=new BufferedImage(2000,2000,BufferedImage.TYPE_INT_RGB);
         buffer=ArrierePlan.getGraphics();
-        Items=new LinkedList <Item>();//les karts sont toujours ajoutés en premier dans la liste, puis les bonus après
+        Items=new ArrayList <Item>();//les karts sont toujours ajoutés en premier dans la liste, puis les bonus après
         Items.add(kart1);
         Timer timer=new Timer(25,new TimerAction());
         timer.start();
@@ -115,6 +117,7 @@ public class graphTest extends JFrame {
                     if (Shift){
                         Missile m=new Missile(X+DX*2.5,Y+DY*2.5,DX,DY);//le missile est créé devant si on tire devant
                         Items.add(m);
+                        System.out.println("lol");
                     }
                     else if (Space){
                         Missile m=new Missile(X-DX*2.5,Y-DY*2.5,-DX,-DY);//ou derrière si on tire derrière
@@ -129,18 +132,19 @@ public class graphTest extends JFrame {
                 }
             }
         }
-        for (int k=1; k<Items.size(); k++) {//ça commence à 1 car on a déjà fait avancer le kart avant, ce sera 2 si il y a deux karts
-            Item O = Items.get(k);
+        
+        for (int i=1;i<Items.size();i++) {//ça commence à 1 car on a déjà fait avancer le kart avant, ce sera 2 si il y a deux karts
+            Item O = Items.get(i);
             O.move();
         }
         kart1.calculTheta();
         kart1.coordCoinsX();
         kart1.coordCoinsY();
-        if (kart1.colliMurs()){
+       /* if (kart1.colliMurs()){
             kart1.setX(X-DX*2.5);
             kart1.setY(Y-DY*2.5);
             kart1.setSpeed(0);                        
-        }
+        }*/
         if (nbJoueurs==2){//on teste la collision entre les 2 karts
             kart2.coordCoinsX();
             kart2.coordCoinsY();
@@ -156,13 +160,15 @@ public class graphTest extends JFrame {
         for (int i=nbJoueurs;i<Items.size()-1;i++){
             Item O = Items.get(i);
             for (int j=0;j<nbJoueurs;j++){//ça teste la collision avec les karts
-                if (O.collision(Items.get(j))){
-                    O.doCollision(Items.get(j));
+                Item l=Items.get(j);
+                if (O.collision(l)){
+                    O.doCollision(l);
                 }
             }
             for (int j=i+1;j<Items.size();j++){//puis avec les autres bonus
-                if (O.collision(Items.get(j))){
-                    O.doCollision(Items.get(j));
+            Item l=Items.get(j);
+                if (O.collision(l)){
+                    O.doCollision(l);
                 }
             }
         }

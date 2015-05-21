@@ -103,7 +103,7 @@ public class Kart extends Item {
                 frontSpeed=maxSpeed;
             }
             
-        }System.out.println("frontSpeed= "+frontSpeed);
+        }
         if (i==0 && derapeDroite==false && derapeGauche==false){
             x=x+dx*(frontSpeed*0.025);
             y=y+dy*(frontSpeed*0.025);
